@@ -1,0 +1,98 @@
+﻿@model IEnumerable<RestaurantWebApplication.Product>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>PRODUCTS</h1>
+
+<p>
+    <a asp-action="Create">CREATE NEW</a>
+</p>
+
+<div>
+    <h3>SELECT EXCEL FILE FOR LOAD</h3>
+    @using (Html.BeginForm("Import", "Products", FormMethod.Post, new { enctype = "multipart/form-data", id = "frm-excel" }))
+    {
+        <div>
+            LOAD FILE:
+            <input type="file" name="fileExcel" id="fileExcel" />
+            <div>
+                <input type="submit" value="LOAD" />
+            </div>
+        </div>
+    }
+</div>
+<div>
+    <h3>EXPORT INFO TO THE FILE</h3>
+    <a asp-action="Export" > DOWNLOAD </a>
+</div>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductType)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in ViewBag.ProductWithDishes) {
+        <tr>
+            <td>
+                @item.Item1.Name
+            </td>
+            <td>
+                @item.Item1.ProductType.Name
+            </td>
+            <td>
+                @if(item.Item2.Count == 0)
+                {    
+                    <a asp-action="Delete" asp-route-id="@item.Item1.ProductId">DELETE</a>
+                }
+                else
+                {
+                    <i>STILL EXIST IN SOME DISHES</i>    
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+
+<div class="parent">
+    <div class="block" id="dur-div"></div>
+</div>  
+
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load("current", { "packages": ["corechart"] });
+
+    google.charts.setOnLoadCallback(drawAmount);
+
+    function drawAmount() {
+    $.get('/api/Values/JsonData', function(JsonData){
+    var data = google.visualization.arrayToDataTable(JsonData, false);
+    chart = new google.visualization.BarChart(document.getElementById("dur-div"));
+
+    var options = {
+    title: "Amount of products by types",
+    titleTextStyle: { color: "black" },
+    legend: { textStyle: { color: "black" } },
+    chartArea: { width: '85%', height: '75%' },
+    height: 400,
+    width:450
+
+    }
+    chart.draw(data, options);
+    })
+    }
+</script>

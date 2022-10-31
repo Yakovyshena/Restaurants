@@ -1,0 +1,52 @@
+﻿@model RestaurantWebApplication.Chef
+
+<h1>SPETIALIZATION MANAGMENT</h1>
+
+<h4>@Model.FullName</h4>
+<hr />
+<div class="row">
+    <dt class = "col-sm-12">
+        <Text>SPECIALIZATIONS:</Text>
+    </dt>
+    @foreach(var spec in ViewBag.Specializations)
+    {
+        @if (ViewBag.ChefSpecializations.Contains(spec))
+        {
+            <dd class = "col-sm-5">
+                <b>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    @spec.Name
+                </b>
+            </dd>
+            <dd class = "col-sm-5">
+                    <form asp-action="RemoveSpecialization" asp-route-ChefId="@Model.ChefId" asp-route-SpecialisationId="@spec.SpecialisationId" >
+                        <input type="submit" value="REMOVE" class="btn btn-danger" />
+                    </form>
+            </dd>
+        }
+        else
+        {
+            <dd class = "col-sm-5">
+                <b>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    @spec.Name
+                </b>
+            </dd>
+            <dd class = "col-sm-5">
+                <form asp-action="AddSpecialization" asp-route-ChefId="@Model.ChefId" asp-route-SpecialisationId="@spec.SpecialisationId" >
+                    <input type="submit" value="ADD" class="btn btn-success" />
+                </form>
+            </dd>
+        }
+    }
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ChefId">EDIT</a> 
+    <text> | </text>
+    <a asp-action="Details" asp-route-id="@Model?.ChefId">CHEF DETAILS</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

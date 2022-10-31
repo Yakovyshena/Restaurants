@@ -1,0 +1,66 @@
+﻿@model RestaurantWebApplication.Menu
+
+<h1>DISH MANAGMENT</h1>
+
+@{
+    string menusTitle = "MENU, CREATED BY " + ViewBag.FullChefName;
+}
+
+<h4>@Html.DisplayFor(model => menusTitle)</h4>
+<hr />
+<div class="row">
+    <dt class = "col-sm-12">
+        <Text>DISHES:</Text>
+    </dt>        
+    @foreach(var dish in ViewBag.Dishes)
+    {
+        @if (ViewBag.MenuDishes.Contains(dish))
+        {
+            <dd class = "col-sm-5">
+                <b>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    @dish.Name
+                    (
+                </b>
+                <i>
+                    @dish.Description
+                </i>
+                <b>)</b>
+            </dd>
+            <dd class = "col-sm-5">
+                    <form asp-action="RemoveDish" asp-route-MenuId="@Model.MenuId" asp-route-DishId="@dish.DishId" >
+                        <input type="submit" value="REMOVE" class="btn btn-danger" />
+                    </form>
+            </dd>
+        }
+        else
+        {
+            <dd class = "col-sm-5">
+                <b>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    @dish.Name
+                    (
+                </b>
+                <i>
+                    @dish.Description
+                </i>
+                <b>)</b>
+            </dd>
+            <dd class = "col-sm-5">
+                <form asp-action="AddDish" asp-route-MenuId="@Model.MenuId" asp-route-DishId="@dish.DishId" >
+                    <input type="submit" value="ADD" class="btn btn-success" />
+                </form>
+            </dd>
+        }
+    }
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.MenuId">EDIT</a>
+    <text> | </text>
+    <a asp-action="Details" asp-route-id="@Model.MenuId">MENU DETAILS</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,45 @@
+﻿@model RestaurantWebApplication.Menu
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+@{
+    string menusTitle = "MENU, CREATED BY " + Model.BrandChef.FirstName + " " + 
+        Model.BrandChef.MiddleName + " " + 
+        Model.BrandChef.LastName;
+}
+<h1>@Html.DisplayFor(model => menusTitle)</h1>
+
+<div>
+    <h6>
+        <a asp-action="ChefDetails" asp-route-id="@Model?.BrandChefId">MORE ABOUT CHEF</a>
+    </h6>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-12">
+            <Text>DISHES:</Text>
+        </dt>
+        @foreach(var dish in ViewBag.Dishes)
+        {
+            
+            <dd class = "col-sm-5">
+                <Text>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    @dish.Name                
+                </Text>
+            </dd>
+            <dd class = "col-sm-7">
+                <a asp-action="DishDetails" asp-route-id="@dish.DishId">DETAILS</a>
+            </dd>
+        }
+    </dl>
+</div>
+<div>
+    @if (User.IsInRole("admin"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.MenuId">EDIT</a>
+        <text> | </text>
+    }
+    <a asp-action="Index">MENU LIST</a>
+</div>

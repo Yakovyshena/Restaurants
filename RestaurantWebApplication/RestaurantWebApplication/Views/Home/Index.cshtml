@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "RESTAURANT WEB APPLICATION";
+}
+
+@*
+    @if(User.Identity.IsAuthenticated)
+    {
+        <p>@User.Identity.Name</p>
+        <form method = "post" asp-controller = "Account" asp-action = "Logout">
+            <input type = "submit" value = "LOG OUT">
+        </form>
+    }
+    else
+    {
+        <a asp-controller = "Account" asp-action = "Login">LOG IN</a>
+        <a asp-controller = "Account" asp-action = "Register">REGISTER</a>
+    }
+*@
+
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to the Restaurants web application</h1>
+    <p> LERN ABOUT: 
+            <a asp-action="RestaurantsIndex">RESTAURANTS</a>
+            @if(User.Identity.IsAuthenticated)
+            {
+                <text>   |   </text>
+                <a asp-action="ChefsIndex">CHEFS</a>
+                <text>   |   </text>
+                <a asp-action="DishesIndex">DISHES</a>
+            }
+    </p>
+    @if(User.IsInRole("admin"))
+    {<p> OH, HI ADMIN!
+        <a asp-action="CitiesIndex">CITIES</a>
+        <text>   |   </text>
+        <a asp-action="CountriesIndex">COUNTRIES</a>
+        <text>   |   </text>
+        <a asp-action="ProductsIndex">PRODUCTS</a>
+        <text>   |   </text>
+        <a asp-action="ProductTypesIndex">PRODUCT_TYPES</a>
+        <text>   |   </text>
+        <a asp-action="SpecialisationsIndex">SPECIALIZATIONS</a>
+    </p>}
+</div>

@@ -1,0 +1,135 @@
+﻿@model IEnumerable<RestaurantWebApplication.Restaurant>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>RESTAURANTS</h1>
+
+@if (User.IsInRole("admin"))
+{
+
+
+<p>
+    <a asp-action="Create">CREATE NEW</a>
+</p>
+
+}  
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CorrectAdress)
+            </th>
+            @*
+            <th>
+                @Html.DisplayNameFor(model => model.MainThemeDefenition)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Chef)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            *@
+            <th>
+                @Html.DisplayNameFor(model => model.IconicDishId)
+            </th>
+            @*
+            <th>
+                @Html.DisplayNameFor(model => model.Menu)
+            </th>
+            *@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City.Name)
+                <text>,</text>
+                <text>&nbsp;</text>
+                @Html.DisplayFor(modelItem => item.CorrectAdress)
+            </td>
+            @*
+            <td>
+                @Html.DisplayFor(modelItem => item.MainThemeDefenition)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Chef.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City.CityId)
+            </td>
+            *@
+            <td>
+                @Html.DisplayFor(modelItem => item.IconicDish.Name)
+            </td>
+            @*
+            <td>
+                @Html.DisplayFor(modelItem => item.Menu.MenuId)
+            </td>
+            *@
+            @if (User.IsInRole("admin"))
+            {
+                <td class = "col-sm-3">
+                    <a asp-action="Edit" asp-route-id="@item.RestaurantId">EDIT</a>
+                    <text> | </text>
+                    <a asp-action="Delete" asp-route-id="@item.RestaurantId">DELETE</a>
+                </td>
+            }
+            @if (User.Identity.IsAuthenticated)
+            {
+                <td class = "col-sm-1">
+                    <a asp-action="Details" asp-route-id="@item.RestaurantId">DETAILS</a>
+                </td>
+            }
+        </tr>
+}
+    </tbody>
+</table>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="parent">
+        <div class="block" id="dur-div"></div>
+    </div>  
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load("current", { "packages": ["corechart"] });
+
+        google.charts.setOnLoadCallback(drawAmount);
+
+        function drawAmount() {
+        $.get('/api/Chart/JsonData', function(JsonData){
+        var data = google.visualization.arrayToDataTable(JsonData, false);
+        chart = new google.visualization.PieChart(document.getElementById("dur-div"));
+
+        var options = {
+        title: "Amount of restaurants in countries",
+        titleTextStyle: { color: "black" },
+        legend: { textStyle: { color: "black" } },
+        chartArea: { width: '85%', height: '75%' },
+        height: 400,
+        width:450
+
+        }
+        chart.draw(data, options);
+        })
+        }
+    </script>
+}
+else
+{
+    <a asp-controller = "Account" asp-action = "Login">LOG IN FOR MORE</a>
+}

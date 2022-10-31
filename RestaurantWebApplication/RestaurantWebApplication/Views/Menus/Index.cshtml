@@ -1,0 +1,52 @@
+﻿@model IEnumerable<RestaurantWebApplication.Menu>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>MENUS</h1>
+
+<p>
+    @if (User.IsInRole("admin"))
+    {
+        <a asp-action="Create">CREATE NEW</a>
+    }  
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BrandChef)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.MenusWithRestaurants) {
+            <tr>
+                <td>
+                    @item.Item1.BrandChef.FullName
+                </td>
+                @if (User.IsInRole("admin"))
+                {
+                    <td class = "col-sm-3">
+                        <a asp-action="Edit" asp-route-id="@item.Item1.MenuId">EDIT</a>
+                        @if(item.Item2.Count == 0)
+                        {
+                            <text> | </text>
+                            <a asp-action="Delete" asp-route-id="@item.Item1.MenuId">DELETE</a>
+                        }
+                        else
+                        {
+                            <text> | </text>
+                            <i>STILL USED IN SOME RESTAURANTS</i>
+                        }
+                    </td>
+                }
+                <td class = "col-sm-1">
+                    <a asp-action="Details" asp-route-id="@item.Item1..MenuId">DETAILS</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
